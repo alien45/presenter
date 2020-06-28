@@ -81,18 +81,20 @@ export default function App() {
 					}} />
 				))}
 			</div>
-			<div>
-				<div
-					style={styles.left}
-					onClick={() => setSlide(slideIndex - 1, slides.length)}
-					title={slides.length && slideIndex >= 1 && 'Previous'}
-				/>
-				<div
-					style={styles.right}
-					onClick={() => setSlide(slideIndex + 1, slides.length)}
-					title={slides.length && slideIndex < slides.length - 1 && 'Next'}
-				/>
-			</div>
+			{isPresenter && (
+				<div>
+					<div
+						style={styles.left}
+						onClick={() => setSlide(slideIndex - 1, slides.length)}
+						title={slides.length && slideIndex >= 1 && 'Previous'}
+					/>
+					<div
+						style={styles.right}
+						onClick={() => setSlide(slideIndex + 1, slides.length)}
+						title={slides.length && slideIndex < slides.length - 1 && 'Next'}
+					/>
+				</div>
+			)}
 			<div style={styles.counter}>
 				{slideIndex + 1}/{slides.length}
 			</div>
