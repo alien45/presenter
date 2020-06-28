@@ -33,10 +33,10 @@ export default function App() {
 			console.log('Slide changed', index)
 		})
 
-		client.onReconnect(() => {
-			slides.length === 0 && client.getSlides(slides => setSlides(slides || []))
-			isPresenter && password && handleLogin()
-		})
+		client.onReconnect(() => setTimeout(() => {
+			// client.getSlides(slides => setSlides(slides || []))
+			handleLogin()
+		}, 500))
 		return () => { }
 	}, [])
 

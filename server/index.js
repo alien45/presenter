@@ -57,11 +57,10 @@ function handleSetCurrentSlide(index, cb) {
     if (index < 0 || index >= slides.length) return cb('Invalid index')
     if (currentSlideIndex === index) return cb('Index unchanged')
     currentSlideIndex = index
-    console.log('ClientIDs: ', Object.keys(allClients))
+    console.log('Total clients: ', Object.keys(allClients).length)
     Object.keys(allClients).forEach(clientId => {
         const client = allClients[clientId]
         if (!client) return console.log('broadcast(): Client not found')
-        console.log('broadcasted to', client.id)
         client.emit('slide-index', index)
     })
     cb(null) // success
@@ -76,5 +75,5 @@ function handleLogin(password, cb) {
     if (isAdmin) adminClientIds.push(client.id)
     cb(null, isAdmin, slides, currentSlideIndex || 0)
 
-    console.log(`${isAdmin ? 'Admin' : 'Client'} logged in ${client.id}`)
+    console.log(`${isAdmin ? 'Admin' : 'Viewer'} logged in ${client.id}`)
 }
