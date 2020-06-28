@@ -50,12 +50,11 @@ function handleDisconnect() {
 function handleGetCurrentSlide(cb) { cb && cb(null, currentSlideIndex || 0) }
 
 function handleSetCurrentSlide(index, cb) {
-    if (!cb) return
+    if (!cb || currentSlideIndex === index) return
     const client = this
     if (!adminClientIds.includes(client.id)) return cb('Permission denied')
     const slides = getSlides()
     if (index < 0 || index >= slides.length) return cb('Invalid index')
-    if (currentSlideIndex === index) return cb('Index unchanged')
     currentSlideIndex = index
     console.log('Index: ', index, 'Total clients: ', Object.keys(allClients).length)
     Object.keys(allClients).forEach(clientId => {
