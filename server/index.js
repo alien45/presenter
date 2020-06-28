@@ -9,7 +9,8 @@ const PORT_WS = process.env.PORT_WS || 4001
 let adminClientIds = []
 const allClients = {}
 const PASS_TEMP = process.env.PASSWORD || '123456'
-let currentSlideIndex = ''
+let currentSlideIndex = 0
+let slides // names of slide image files stored under public/slides/ directory
 // web socket server
 const wsServer = http.createServer()
 const socket = socketIO.listen(wsServer)
@@ -34,10 +35,9 @@ wsServer.listen(PORT_WS, () => console.log(`Websocket listening on port ${PORT_W
 
 function getSlides() {
     try {
-        return fs.readdirSync(path.join(__dirname, '../build/slides/'))
-    } catch (err) {
-        return []
-    }
+        slides = slides || fs.readdirSync(path.join(__dirname, '../build/slides/'))
+    } catch (err) { }
+    return slides || []
 }
 
 function handleDisconnect() {
@@ -47,7 +47,7 @@ function handleDisconnect() {
     console.log('Client disconnected', client.id)
 }
 
-function handleGetCurrentSlide(cb) { cb && cb(null, currentSlideIndex || 0) }
+function handleGetCurrentSlide(cb) { cb && cb(null, currentSlideIndex) }
 
 function handleSetCurrentSlide(index, cb) {
     if (!cb || currentSlideIndex === index) return
@@ -72,7 +72,7 @@ function handleLogin(password, cb) {
     const slides = getSlides()
     allClients[client.id] = client
     if (isAdmin) adminClientIds.push(client.id)
-    cb(null, isAdmin, slides, currentSlideIndex || 0)
+    cb(null, isAdmin, slides, currentSlideIndex)
 
     console.log(`${isAdmin ? 'Admin' : 'Viewer'} logged in ${client.id}`)
 }
