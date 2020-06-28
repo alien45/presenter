@@ -69,20 +69,32 @@ export default function App() {
 	)
 	return (
 		<div>
-			<div style={styles.counter}>
-				{slideIndex + 1}/{slides.length}
-			</div>
 			<div style={styles.imgContainer}>
 				{slides.map((slide, index) => (
 					<img {...{
 						src: `./slides/${slide}`,
 						style: {
+							...styles.img,
 							display: slideIndex !== index ? 'none' : 'block',
-							width: '100%',
 						},
 						alt: slide,
 					}} />
 				))}
+			</div>
+			<div>
+				<div
+					style={styles.left}
+					onClick={() => setSlide(slideIndex - 1, slides.length)}
+					title={slides.length && slideIndex >= 1 && 'Previous'}
+				/>
+				<div
+					style={styles.right}
+					onClick={() => setSlide(slideIndex + 1, slides.length)}
+					title={slides.length && slideIndex < slides.length - 1 && 'Next'}
+				/>
+			</div>
+			<div style={styles.counter}>
+				{slideIndex + 1}/{slides.length}
 			</div>
 		</div>
 	)
@@ -102,9 +114,18 @@ const styles = {
 		fontWeight: 'bold',
 		color: 'grey',
 	},
+	img: {
+		width: 'auto',
+		height: 'auto',
+		maxWidth: '100%',
+		maxHeight: '100%',
+		margin: 'auto',
+	},
 	imgContainer: {
-		height: '100%',
 		width: '100%',
+		height: '100%',
+		display: 'block',
+		position: 'absolute',
 		overflow: 'hidden',
 	},
 	input: {
@@ -112,6 +133,22 @@ const styles = {
 		borderRadius: 3,
 		border: '1px solid grey'
 	},
+	left: {
+		cursor: 'pointer',
+		position: 'fixed',
+		height: '100%',
+		width: '40%',
+		top: 0,
+		left: 0,
+	},
+	right: {
+		cursor: 'pointer',
+		position: 'fixed',
+		height: '100%',
+		width: '40%',
+		top: 0,
+		right: 0,
+	}
 }
 
 // getUrlParam reads the URL parameters
@@ -172,7 +209,11 @@ function setupKeyHandler(numSlides) {
 				// console.log({ keyCode: e.keyCode })
 				break
 		}
-		if (index < 0 || index >= numSlides) return
-		client.setCurrentSlide(index, err => err && console.log('setCurrentSlide', { err }))
+		setSlide(index, numSlides)
 	}
+}
+
+const setSlide = (index, numSlides) => {
+	if (index === window.slideIndex || index < 0 || index >= numSlides) return
+	client.setCurrentSlide(index, err => err && alert(`Failed to set slide. Error: ${err}`))
 }
