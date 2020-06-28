@@ -13,8 +13,8 @@ export default function App() {
 		setSlideIndexOrg(index)
 	}
 	const handleLogin = deferred(() => {
-		client.login(password, (_, admin, slides, index) => {
-			if (password) {
+		client.login(DO_PRESENT && password, (_, admin, slides, index) => {
+			if (DO_PRESENT && password) {
 				setIsPresenter(admin)
 				admin && setupKeyHandler(slides.length)
 				// clear password if incorrect

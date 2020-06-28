@@ -57,7 +57,7 @@ function handleSetCurrentSlide(index, cb) {
     if (index < 0 || index >= slides.length) return cb('Invalid index')
     if (currentSlideIndex === index) return cb('Index unchanged')
     currentSlideIndex = index
-    console.log('Total clients: ', Object.keys(allClients).length)
+    console.log('Index: ', index, 'Total clients: ', Object.keys(allClients).length)
     Object.keys(allClients).forEach(clientId => {
         const client = allClients[clientId]
         if (!client) return console.log('broadcast(): Client not found')
